@@ -65,7 +65,8 @@ extension XGISO {
 			"common.fsys",
 			"field_common.fsys",
 			"fight_common.fsys",
-			"people_archive.fsys"
+			"people_archive.fsys",
+            "pocket_menu.fsys"
 		]
 	}
 	
@@ -105,37 +106,37 @@ extension XGISO {
 		let world_map = XGFiles.msg("world_map")
 		
 		if !pocket_menu.exists {
-			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pm.file = pocket_menu
 			pm.save()
 		}
 		
 		if !nameentrymenu.exists {
-			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			nem.file = nameentrymenu
 			nem.save()
 		}
 		
 		if !system_tool.exists {
-			let st = XGFiles.nameAndFolder("pcbox_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			st.file = system_tool
 			st.save()
 		}
 		
 		if !pda_menu.exists {
-			let pda = XGFiles.nameAndFolder("pda_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pda.file = pda_menu
 			pda.save()
 		}
 		
 		if !p_exchange.exists {
-			let pex = XGFiles.nameAndFolder("pokemonchange_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pex.file = p_exchange
 			pex.save()
 		}
 		
 		if !world_map.exists {
-			let wm = XGFiles.nameAndFolder("world_map",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let wm = XGFiles.nameAndFolder("world_map.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			wm.file = world_map
 			wm.save()
 		}
