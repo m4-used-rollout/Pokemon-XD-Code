@@ -119,17 +119,17 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0) {
+		repeat {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
-		}
+		} while (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)
 		return XGMoves.move(rand)
 	}
 	
 	static func randomShadow() -> XGMoves {
 		var rand = 0
-		while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)  {
+		repeat  {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
-		}
+		} while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)
 		return XGMoves.move(rand)
 	}
 	
