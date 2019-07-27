@@ -54,6 +54,7 @@ indirect enum XGFiles {
 	case iso
 	case toc
 	case log(Date)
+    case randoLog(Date)
 	case nameAndFolder(String, XGFolders)
 	
 	var path : String {
@@ -91,6 +92,7 @@ indirect enum XGFiles {
 			case .texture(let s)		: return s
 			case .toc					: return "Game" + XGFileTypes.toc.fileExtension
 			case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
+            case .randoLog(let d)       : return "Randomization Log - " + d.description + XGFileTypes.txt.fileExtension
 			case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
 			case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
@@ -124,6 +126,7 @@ indirect enum XGFiles {
 			case .iso				: folder = .ISO
 			case .toc				: folder = .Documents
 			case .log				: folder = .Logs
+            case .randoLog          : folder = .RandoLogs
 			case .rel				: folder = .Rels
 			case .ccd				: folder = .Col
 			case .json				: folder = .JSON
@@ -408,6 +411,7 @@ indirect enum XGFolders {
 	case AutoFSYS
 	case MenuFSYS
 	case Logs
+    case RandoLogs
 	case Rels
 	case Col
 	case ISOExport(String)
@@ -441,6 +445,7 @@ indirect enum XGFolders {
 			case .AutoFSYS			: return "AutoFSYS"
 			case .MenuFSYS			: return "MenuFSYS"
 			case .Logs				: return "Logs"
+            case .RandoLogs         : return "Randomizer Logs"
 			case .Rels				: return "Relocatable Objects"
 			case .Col				: return "Collision Data"
 			case .ISOExport     	: return "ISO Export"

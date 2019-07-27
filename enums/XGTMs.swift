@@ -13,7 +13,7 @@ let kFirstTMListOffset = region == .EU ? 0x43CC80 : 0x4023A0
 let kSizeOfTMEntry	   = 0x08
 let kFirstTMItemIndex  = 0x121
 let kNumberOfTMsAndHMs = 0x3A
-let kNumberOfTMs	   = 0x32
+let kNumberOfTMs	   = 0x32 
 
 //let kFirstTutorMoveDataOffset	= 0xA7918
 

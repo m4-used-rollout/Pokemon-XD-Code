@@ -32,6 +32,8 @@ class GoDRandomiserViewController: GoDViewController {
 		XGUtility.deleteSuperfluousFiles()
 		increaseFileSizes = true
 		
+        XGRandomiser.clearLog()
+        
 		if pspecies.state == .on {
 			XGRandomiser.randomisePokemon()
 		}
@@ -41,15 +43,15 @@ class GoDRandomiserViewController: GoDViewController {
 		if ptypes.state == .on {
 			XGRandomiser.randomiseTypes()
 		}
-		if pabilities.state == .on {
-			XGRandomiser.randomiseAbilities()
-		}
 		if pstats.state == .on {
 			XGRandomiser.randomisePokemonStats()
 		}
 		if pevolutions.state == .on {
 			XGRandomiser.randomiseEvolutions()
 		}
+        if pabilities.state == .on {
+            XGRandomiser.randomiseAbilities()
+        }
 		if mtypes.state == .on {
 			XGRandomiser.randomiseMoveTypes()
 		}
@@ -62,8 +64,15 @@ class GoDRandomiserViewController: GoDViewController {
 		if removeTrades.state == .on {
 			XGDolPatcher.removeTradeEvolutions()
 		}
-		
+        
+        let log = XGRandomiser.getLog()
+        let logFile = XGFiles.randoLog(date)
+        XGUtility.saveString(log, toFile: logFile)
+        
 		XGUtility.compileMainFiles()
+        
+        printg("Saved randomizer log to " + logFile.path)
+        
 	}
 	
     

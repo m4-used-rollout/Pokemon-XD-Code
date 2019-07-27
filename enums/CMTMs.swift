@@ -42,7 +42,7 @@ enum XGTMs : XGDictionaryRepresentable {
 	}
 	
 	func replaceWithMove(_ move: XGMoves) {
-		if move == XGMoves.move(0) { return }
+		if move.index == 0 { return }
 		
 		let dol = XGFiles.dol.data!
 		dol.replace2BytesAtOffset(startOffset, withBytes: move.index)

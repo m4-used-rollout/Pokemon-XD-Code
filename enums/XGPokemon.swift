@@ -94,9 +94,19 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		}
 	}
 	
-	func hasType(type: XGMoveTypes) -> Bool {
-		return (self.type1 == type) || (self.type2 == type)
-	}
+    func hasType(_ type: XGMoveTypes) -> Bool {
+        return (self.type1 == type) || (self.type2 == type)
+    }
+    
+    var typeSet : Set<XGMoveTypes> {
+        get {
+            return Set([type1, type2])
+        }
+    }
+    
+    func sharesType(_ types:Set<XGMoveTypes>) -> Bool {
+        return !typeSet.isDisjoint(with: types)
+    }
 	
 	var catchRate : Int {
 		get {
@@ -124,7 +134,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		
 		func hasMove(_ move: XGMoves) -> Bool {
 			for aMove in moves {
-				if move == aMove {
+				if move.index == aMove.index {
 					return true
 				}
 			}
@@ -160,6 +170,32 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		return XGPokemon.pokemon(rand)
 	}
 	
+    func evolvesInto(_ species:XGPokemon) -> Bool {
+        let evolutions = XGPokemonStats(index: self.index).evolutions
+        for evo in evolutions {
+            if evo.evolvesInto == species.index {
+                return true
+            }
+            if (XGPokemon.pokemon(evo.evolvesInto).evolvesInto(species)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func evosFromFinal() -> Int {
+        let evolutions = XGPokemonStats(index:self.index).evolutions
+        return 1 + (evolutions.filter({ (evo) -> Bool in
+            return evo.evolvesInto > 0
+        }).map({ (evo) -> Int in
+            return XGPokemon.pokemon(evo.evolvesInto).evosFromFinal()
+        }).max() ?? -1)
+    }
+    
+    func bst() -> Int {
+        return XGPokemonStats(index:self.index).bst
+    }
+    
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			return ["Value" : self.index as AnyObject]
@@ -227,9 +263,19 @@ enum XGOriginalPokemon {
 		}
 	}
 	
-	func hasType(type: XGMoveTypes) -> Bool {
+	func hasType(_ type: XGMoveTypes) -> Bool {
 		return (self.type1 == type) || (self.type2 == type)
 	}
+    
+    var typeSet : Set<XGMoveTypes> {
+        get {
+            return Set([type1, type2])
+        }
+    }
+    
+    func sharesType(_ types:Set<XGMoveTypes>) -> Bool {
+        return typeSet.union(types).count > 0
+    }
 	
 	static func allPokemon() -> [XGOriginalPokemon] {
 		var mons = [XGOriginalPokemon]()

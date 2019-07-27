@@ -90,6 +90,12 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 			return shadowMovesUseHMFlag ? self.data.HMFlag : (self.index >= kFirstShadowMoveIndex) && (self.index <= kLastShadowMoveIndex)
 		}
 	}
+    
+    var isAttack : Bool {
+        get {
+            return self.data.basePower > 0
+        }
+    }
 	
 	var data : XGMove {
 		get {
@@ -108,6 +114,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 			return ["Value" : self.name.string as AnyObject]
 		}
 	}
+    
 	
 	static func allMoves() -> [XGMoves] {
 		var moves = [XGMoves]()
@@ -117,48 +124,42 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 		return moves
 	}
 	
-	static func random() -> XGMoves {
-		var rand = 0
+    static func random(baseMove:XGMoves, stabType1: XGMoveTypes? = nil, stabType2: XGMoveTypes? = nil) -> XGMoves {
+        var randMove:XGMoves
+        var stabTries = (stabType1 != nil &&
+            stabType2 != nil &&
+            baseMove.isAttack &&
+        arc4random_uniform(UInt32(100)) < 35) ? 1000 : 0
 		repeat {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
-		} while (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)
-		return XGMoves.move(rand)
+            stabTries -= 1
+			randMove = XGMoves.move(Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1)
+		} while
+            (stabTries > 0 && randMove.type != stabType1 && randMove.type != stabType2) || //35% chance to force STAB
+            (randMove.isShadowMove != baseMove.isShadowMove) || //only replace shadow moves with other shadow moves
+                (randMove.isAttack != baseMove.isAttack) || //only replace attacks with attacks, status with status
+                (randMove.name.string == "-") || //don't use move 0 or 355
+                (randMove.name.string == "????") || //don't use move 357 (Col)
+                (randMove.descriptionID == 0)
+		return randMove
 	}
 	
-	static func randomShadow() -> XGMoves {
-		var rand = 0
-		repeat  {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
-		} while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)
-		return XGMoves.move(rand)
+    static func randomMoveset(sourceMoves: [XGMoves], stabType1: XGMoveTypes? = nil, stabType2: XGMoveTypes? = nil) -> [XGMoves] {
+		var newMoves = [XGMoves]()
+        for move in sourceMoves {
+            if move.index == 0 {
+                continue
+            }
+            var newMove: XGMoves
+            repeat {
+                newMove = XGMoves.random(baseMove: move, stabType1: stabType1, stabType2: stabType2)
+            } while newMoves.contains(newMove)
+            newMoves.append(newMove)
+        }
+		while newMoves.count < 4 {
+			newMoves.append(XGMoves.move(0))
+		}
+        return newMoves
 	}
-	
-	static func randomMoveset(count: Int = 4) -> [XGMoves] {
-		var set = [Int]()
-		while set.count < count {
-			set.addUnique(XGMoves.random().index)
-		}
-		while set.count < 4 {
-			set.append(0)
-		}
-		return set.map({ (i) -> XGMoves in
-			return .move(i)
-		})
-	}
-	
-	static func randomShadowMoveset(count: Int = 4) -> [XGMoves] {
-		var set = [Int]()
-		while set.count < count {
-			set.addUnique(XGMoves.randomShadow().index)
-		}
-		while set.count < 4 {
-			set.append(0)
-		}
-		return set.map({ (i) -> XGMoves in
-			return .move(i)
-		})
-	}
-	
 }
 
 enum XGOriginalMoves {
@@ -266,6 +267,12 @@ func allOriginalMovesArray() -> [XGOriginalMoves] {
 	}
 	return moves
 	
+}
+
+extension XGMoves: Equatable {
+    static func == (a: XGMoves, b: XGMoves) -> Bool {
+        return a.index == b.index
+    }
 }
 
 

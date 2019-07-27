@@ -387,6 +387,15 @@ class XGDolPatcher: NSObject {
 				printg("Couldn't decapitalise name: \(name)")
 			}
 		}
+        
+        for deck in TrainerDecksArray {
+            for trainer in deck.allTrainers {
+                let name = trainer.name
+                if !name.duplicateWithString(name.string.capitalized).replace() {
+                    printg("Couldn't decapitalise name: \(name)")
+                }
+            }
+        }
 		
 		for i in 0 ..< kNumberOfAbilities {
 			let name = XGAbilities.ability(i).name

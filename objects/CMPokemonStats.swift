@@ -139,7 +139,6 @@ class XGPokemonStats: NSObject {
 	}
 	
 	
-	
 	init(index : Int!) {
 		super.init()
 		
@@ -289,6 +288,12 @@ class XGPokemonStats: NSObject {
 		rel.save()
 		
 	}
+    
+    var bst:Int {
+        get {
+            return self.hp + self.attack + self.defense + self.speed + self.specialAttack + self.specialDefense
+        }
+    }
 	
 	
 	var dictionaryRepresentation : [String : AnyObject] {
